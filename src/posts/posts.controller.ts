@@ -15,6 +15,7 @@ class PostsController implements controller {
   public intializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
     this.router.post(this.path, this.createPost);
+    this.router.delete(`${this.path}/:id`, this.deletePost);
   }
  
   getAllPosts = (request: express.Request, response: express.Response) => {
@@ -30,6 +31,18 @@ class PostsController implements controller {
     createdPost.save()
       .then(savedPost => {
         response.send(savedPost);
+      })
+  }
+
+  deletePost = (request: express.Request, response: express.Response) => {
+    const id = request.params.id;
+    postModel.findByIdAndDelete(id)
+      .then((postToDelete) => {
+        if (postToDelete) {
+          response.sendStatus(204)
+        } else {
+          response.sendStatus(404)
+        }
       })
   }
 }
