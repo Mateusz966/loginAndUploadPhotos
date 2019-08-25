@@ -24,6 +24,9 @@ class PostsController implements controller {
       .then((posts) => {
         response.send(posts);
       })
+      .catch((error) => {
+        response.send(error);
+      });
   }
   
   getPost = (request: express.Request, response: express.Response) => {
@@ -34,9 +37,14 @@ class PostsController implements controller {
         if (post) {
           response.send(post);
         } else {
-          response.sendStatus(404);
+          response.status(404).send({
+            error: 'post not found',
+          });
         }
       })
+      .catch((error) => {
+        response.send(error);
+      });
   }
  
   createPost = (request: express.Request, response: express.Response) => {
@@ -45,6 +53,9 @@ class PostsController implements controller {
     createdPost.save()
       .then(savedPost => {
         response.send(savedPost);
+      })
+      .catch((error) => {
+        response.send(error);
       })
   }
 
@@ -59,6 +70,9 @@ class PostsController implements controller {
           response.sendStatus(404)
         }
       })
+      .catch((error) => {
+        response.send(error)
+      });
   }
 }
 
