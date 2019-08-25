@@ -1,18 +1,12 @@
 import * as express from 'express';
-import Post from './post.interface';
+import post from './post.interface';
+import postModel from './posts.model';
+import controller from '../interfaces/controller.interface';
 
-class PostsController {
+class PostsController implements controller {
   public path = '/posts';
   public router = express.Router();
-
-  private posts: Post[] = [
-    {
-      author: 'Mati',
-      content: 'XD',
-      imageUrl: 'imgUrl',
-      title: 'Title',
-    }
-  ]
+  private posts: post[];
 
   constructor() {
     this.intializeRoutes();
@@ -20,17 +14,23 @@ class PostsController {
  
   public intializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
-    this.router.post(this.path, this.createAPost);
+    this.router.post(this.path, this.createPost);
   }
  
   getAllPosts = (request: express.Request, response: express.Response) => {
-    response.send(this.posts);
+    postModel.find()
+      .then((posts) => {
+        response.send(posts);
+      })
   }
  
-  createAPost = (request: express.Request, response: express.Response) => {
-    const post: Post = request.body;
-    this.posts.push(post);
-    response.send(post);
+  createPost = (request: express.Request, response: express.Response) => {
+    const postData: post = request.body;
+    const createdPost = new postModel(postData);
+    createdPost.save()
+      .then(savedPost => {
+        response.send(savedPost);
+      })
   }
 }
 

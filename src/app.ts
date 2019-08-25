@@ -22,6 +22,7 @@ class App {
  
   private initializeControllers(controllers) {
     controllers.forEach((controller) => {
+      console.log(controller.router);
       this.app.use('/', controller.router);
     });
   }
