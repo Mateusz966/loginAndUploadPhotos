@@ -17,8 +17,8 @@ class userController implements controller {
     this.router.get(this.path, this.getAllUsers);
   }
 
-  getAllUsers = (request: express.Request, response: express.Response) => {
-    
+  private getAllUsers = (request: express.Request, response: express.Response) => {
+
   }
 }
 

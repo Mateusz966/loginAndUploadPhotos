@@ -31,7 +31,6 @@ class PostsController implements controller {
   
   private getPost = (request: express.Request, response: express.Response) => {
     const id = request.params.id;
-    console.log(id);
     postModel.findById(id)
       .then((post) => {
         if (post) {
@@ -61,7 +60,6 @@ class PostsController implements controller {
 
   private deletePost = (request: express.Request, response: express.Response) => {
     const id = request.params.id;
-    console.log(id);
     postModel.findByIdAndDelete(id)
       .then((postToDelete) => {
         if (postToDelete) {
