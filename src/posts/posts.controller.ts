@@ -18,7 +18,7 @@ class PostsController implements controller {
     this.router.delete(`${this.path}/:id`, this.deletePost);
   }
  
-  getAllPosts = (request: express.Request, response: express.Response) => {
+  private getAllPosts = (request: express.Request, response: express.Response) => {
     console.log(request.query);
     postModel.find()
       .then((posts) => {
@@ -29,7 +29,7 @@ class PostsController implements controller {
       });
   }
   
-  getPost = (request: express.Request, response: express.Response) => {
+  private getPost = (request: express.Request, response: express.Response) => {
     const id = request.params.id;
     console.log(id);
     postModel.findById(id)
@@ -47,7 +47,7 @@ class PostsController implements controller {
       });
   }
  
-  createPost = (request: express.Request, response: express.Response) => {
+  private createPost = (request: express.Request, response: express.Response) => {
     const postData: post = request.body;
     const createdPost = new postModel(postData);
     createdPost.save()
@@ -59,7 +59,7 @@ class PostsController implements controller {
       })
   }
 
-  deletePost = (request: express.Request, response: express.Response) => {
+  private deletePost = (request: express.Request, response: express.Response) => {
     const id = request.params.id;
     console.log(id);
     postModel.findByIdAndDelete(id)
