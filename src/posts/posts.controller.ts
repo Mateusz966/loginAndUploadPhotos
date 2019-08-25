@@ -6,7 +6,6 @@ import controller from '../interfaces/controller.interface';
 class PostsController implements controller {
   public path = '/posts';
   public router = express.Router();
-  private posts: post[];
 
   constructor() {
     this.intializeRoutes();
@@ -14,14 +13,29 @@ class PostsController implements controller {
  
   public intializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
+    this.router.get(`${this.path}/:id`, this.getPost);
     this.router.post(this.path, this.createPost);
     this.router.delete(`${this.path}/:id`, this.deletePost);
   }
  
   getAllPosts = (request: express.Request, response: express.Response) => {
+    console.log(request.query);
     postModel.find()
       .then((posts) => {
         response.send(posts);
+      })
+  }
+  
+  getPost = (request: express.Request, response: express.Response) => {
+    const id = request.params.id;
+    console.log(id);
+    postModel.findById(id)
+      .then((post) => {
+        if (post) {
+          response.send(post);
+        } else {
+          response.sendStatus(404);
+        }
       })
   }
  
@@ -36,6 +50,7 @@ class PostsController implements controller {
 
   deletePost = (request: express.Request, response: express.Response) => {
     const id = request.params.id;
+    console.log(id);
     postModel.findByIdAndDelete(id)
       .then((postToDelete) => {
         if (postToDelete) {
