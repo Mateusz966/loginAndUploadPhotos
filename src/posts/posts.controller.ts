@@ -19,7 +19,6 @@ class PostsController implements controller {
   }
  
   private getAllPosts = (request: express.Request, response: express.Response) => {
-    console.log(request.query);
     postModel.find()
       .then((posts) => {
         response.send(posts);
