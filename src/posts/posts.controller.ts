@@ -2,6 +2,8 @@ import * as express from 'express';
 import post from './post.interface';
 import postModel from './posts.model';
 import controller from '../interfaces/controller.interface';
+import { runInNewContext } from 'vm';
+import { NextFunction } from 'connect';
 
 class PostsController implements controller {
   public path = '/posts';
@@ -28,16 +30,14 @@ class PostsController implements controller {
       });
   }
   
-  private getPost = (request: express.Request, response: express.Response) => {
+  private getPost = (request: express.Request, response: express.Response, next: NextFunction) => {
     const id = request.params.id;
     postModel.findById(id)
       .then((post) => {
         if (post) {
           response.send(post);
         } else {
-          response.status(404).send({
-            error: 'post not found',
-          });
+          next('Post not found')
         }
       })
       .catch((error) => {
@@ -57,14 +57,14 @@ class PostsController implements controller {
       })
   }
 
-  private deletePost = (request: express.Request, response: express.Response) => {
+  private deletePost = (request: express.Request, response: express.Response, next: NextFunction) => {
     const id = request.params.id;
     postModel.findByIdAndDelete(id)
       .then((postToDelete) => {
         if (postToDelete) {
           response.sendStatus(204)
         } else {
-          response.sendStatus(404)
+          next('Post not found')
         }
       })
       .catch((error) => {
