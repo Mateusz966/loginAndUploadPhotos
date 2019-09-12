@@ -4,6 +4,8 @@ import postModel from './posts.model';
 import controller from '../interfaces/controller.interface';
 import { runInNewContext } from 'vm';
 import { NextFunction } from 'connect';
+import validationMiddleware from '../middleware/validation.middleware';
+import createPostDto from './post.dto';
 
 class PostsController implements controller {
   public path = '/posts';
