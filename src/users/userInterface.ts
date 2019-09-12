@@ -1,10 +1,8 @@
 interface user {
   firstName: string,
-  lastName: string,
+  email: string,
   password: string,
   repeatPassword: string,
-  nick: string,
-  age: number,
 }
 
 export default user;

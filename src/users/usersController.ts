@@ -1,7 +1,9 @@
-import controller from '../interfaces/controller.interface';
+import controller from '../interfaces/controllerInterface';
 import * as express from 'express';
-import userModel from './users.model';
-import user from './user.interface';
+import userModel from './usersModel';
+import user from './userInterface';
+import checkUserPasswords from '../middleware/userPasswordValidation';
+import { NextFunction } from 'connect';
 
 class userController implements controller {
   public path = '/users';
@@ -29,16 +31,21 @@ class userController implements controller {
       })
   }
 
-  private createUser = (request: express.Request, response: express.Response) => {
+  private createUser = (request: express.Request, response: express.Response, next: NextFunction) => {
     const userData: user = request.body;
+    const isUserPasswordsValid = checkUserPasswords(userData.password, userData.repeatPassword)
     const createdUser = new userModel(userData);
-    createdUser.save()
+    if (isUserPasswordsValid) {
+      createdUser.save()
       .then((user) => {
         response.send(user);
       })
       .catch((error) => {
         response.send(error);
       })
+    } else {
+      next('password isnt valid');
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import * as express from 'express';
-import post from './post.interface';
-import postModel from './posts.model';
-import controller from '../interfaces/controller.interface';
+import post from './postInterface';
+import postModel from './postsModel';
+import controller from '../interfaces/controllerInterface';
 import { NextFunction } from 'connect';
 
 class PostsController implements controller {
