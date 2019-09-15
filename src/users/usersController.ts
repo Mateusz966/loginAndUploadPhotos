@@ -2,7 +2,7 @@ import controller from '../interfaces/controllerInterface';
 import * as express from 'express';
 import userModel from './usersModel';
 import user from './userInterface';
-import checkUserPasswords from '../middleware/userPasswordValidation';
+import checkValuesIsEqual from '../middleware/checkValuesIsEqual';
 import { NextFunction } from 'connect';
 
 class userController implements controller {
@@ -33,7 +33,7 @@ class userController implements controller {
 
   private createUser = (request: express.Request, response: express.Response, next: NextFunction) => {
     const userData: user = request.body;
-    const isUserPasswordsValid = checkUserPasswords(userData.password, userData.repeatPassword)
+    const isUserPasswordsValid = checkValuesIsEqual(userData.password, userData.repeatPassword)
     const createdUser = new userModel(userData);
     if (isUserPasswordsValid) {
       createdUser.save()
@@ -44,7 +44,7 @@ class userController implements controller {
         response.send(error);
       })
     } else {
-      next('password isnt valid');
+      next('repeat password field is not valid');
     }
   }
 }
