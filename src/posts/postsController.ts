@@ -9,10 +9,10 @@ class PostsController implements controller {
   public router = express.Router();
 
   constructor() {
-    this.intializeRoutes();
+    this.initializeRoutes();
   }
  
-  public intializeRoutes() {
+  public initializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPost);
     this.router.post(this.path, this.createPost);

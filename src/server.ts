@@ -1,11 +1,13 @@
 import App from './app';
-import PostsController from './posts/postsController';
-import UserController from './users/usersController';
+import postsController from './posts/postsController';
+import userController from './users/usersController';
+import authController from './auth/authController';
 
 const app = new App(
   [
-  new PostsController(),
-  new UserController(), 
+  new postsController(),
+  new userController(), 
+  new authController(),
   ],
   5000,
 );
