@@ -1,4 +1,5 @@
 interface user {
+  [x: string]: string;
   firstName: string,
   email: string,
   password: string,

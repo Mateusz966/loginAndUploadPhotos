@@ -6,11 +6,13 @@ import userModel from '../users/usersModel';
 import login from './loginInterface';
 import checkValuesIsEqual from '../middleware/checkValuesIsEqual';
 import { NextFunction } from 'express';
+import authService from './authService';
 
 class authController implements controller {
   public path = '/auth';
   public router = express.Router();
   private user = userModel;
+  private authService = new authService();
 
   constructor() {
     this.initializeRoute();
@@ -52,6 +54,7 @@ class authController implements controller {
           .then((isCompare) => {
             if (isCompare) {
               user.password = undefined;
+              this.authService.createToken(user);
               response.send(user)
             } else {
               next('wrong password or e-mail');
