@@ -3,6 +3,7 @@ import * as express from 'express';
 import controller from '../interfaces/controllerInterface';
 import user from '../users/userInterface';
 import userModel from '../users/usersModel';
+import login from './loginInterface';
 import checkValuesIsEqual from '../middleware/checkValuesIsEqual';
 import { NextFunction } from 'express';
 
@@ -43,11 +44,21 @@ class authController implements controller {
   }
 
   private userLogin = (request: express.Request, response: express.Response, next: NextFunction) => {
-    const loginData = request.body;
+    const loginData: login = request.body;
     console.log(loginData.email);
-    this.user.findOne({email: loginData.email}, (error, response) => {
-      if (response) {
-        
+    this.user.findOne({email: loginData.email}, (err, user) => {
+      if (user) {
+        bcrypt.compare(loginData.password, user.password)
+          .then((isCompare) => {
+            if (isCompare) {
+              user.password = undefined;
+              response.send(user)
+            } else {
+              next('wrong password or e-mail');
+            }
+          });
+      } else {
+        next('wrong password or e-mail');
       }
     });
   }
