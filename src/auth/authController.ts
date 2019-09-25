@@ -54,7 +54,9 @@ class authController implements controller {
           .then((isCompare) => {
             if (isCompare) {
               user.password = undefined;
-              this.authService.createToken(user);
+              const tokenData = this.authService.createToken(user);
+              console.log(tokenData.token);
+              response.setHeader('Set-Cookie', [`token=${tokenData.token}`]); 
               response.send(user)
             } else {
               next('wrong password or e-mail');
