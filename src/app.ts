@@ -38,9 +38,8 @@ class App {
       MONGO_PASSWORD,
       MONGO_PATH,
     } = process.env;
-    console.log(MONGO_USER, MONGO_PASSWORD, MONGO_PATH);
     
-    mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {useNewUrlParser: true});
+    mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {useNewUrlParser: true, useUnifiedTopology: true});
   }
 }
  
