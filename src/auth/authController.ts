@@ -20,7 +20,7 @@ class authController implements controller {
 
   private initializeRoute() {
     this.router.post(`${this.path}/registerUser`, this.userRegistration);
-    this.router.post(`${this.path}/userLogin`, this.userLogin);
+    this.router.post(`${this.path}/userLogin`,this.authService.authMiddleware ,this.userLogin);
   }
 
   private userRegistration = (request: express.Request, response: express.Response, next: NextFunction) => {
@@ -47,7 +47,6 @@ class authController implements controller {
 
   private userLogin = (request: express.Request, response: express.Response, next: NextFunction) => {
     const loginData: login = request.body;
-    console.log(loginData.email);
     this.user.findOne({email: loginData.email}, (err, user) => {
       if (user) {
         bcrypt.compare(loginData.password, user.password)
@@ -55,7 +54,6 @@ class authController implements controller {
             if (isCompare) {
               user.password = undefined;
               const tokenData = this.authService.createToken(user);
-              console.log(tokenData.token);
               response.setHeader('Set-Cookie', [`token=${tokenData.token}`]); 
               response.send(user)
             } else {

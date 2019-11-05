@@ -2,6 +2,7 @@ import * as jwt from 'jsonwebtoken';
 import user from '../users/userInterface';
 import dataInToken from './dataInTokenInterface';
 import tokenData from './tokenDataInterface';
+import {Request, Response, NextFunction} from 'express';
 
 class authService {
   public createToken(user: user): tokenData {
@@ -13,6 +14,24 @@ class authService {
       token: jwt.sign(dataInToken, secretKey),
     };
   }
+
+  private verifyToken = (token: string) => {
+    const isCorrect = jwt.verify(token, process.env.JWT_SECRET);
+    return isCorrect;
+  }
+  
+  public authMiddleware = (request: Request, response: Response, next: NextFunction) => {
+    const token = request.cookies.token;
+    const isTokenCorrect = this.verifyToken(token);
+    if(isTokenCorrect) {
+      next()
+    }
+  }
+
+  public validateUser = (request: Request, response: Response, next: NextFunction) => {
+    
+  }
+  
 }
 
 export default authService;
