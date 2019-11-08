@@ -3,10 +3,12 @@ import * as express from 'express';
 import userModel from './usersModel';
 import user from './userInterface';
 import { NextFunction } from 'express';
+import authService from '../auth/authService';
 
 class userController implements controller {
   public path = '/users';
   public router = express.Router();
+  private authService = new authService();
 
   constructor() {
     this.initializeRoute();
@@ -16,14 +18,13 @@ class userController implements controller {
    * initializeRoute
    */
   public initializeRoute() {
-    this.router.get(this.path, this.getAllUsers);
-    this.router.get(`${this.path}/:id`, this.getUser)
+    this.router.get(this.path, this.authService.authMiddleware, this.getAllUsers);
+    this.router.get(`${this.path}/:id`, this.authService.authMiddleware, this.getUser)
   }
 
   private getAllUsers = (request: express.Request, response: express.Response) => {
     userModel.find()
       .then((users) => {
-        console.log(users);
         response.send(users);
       })
       .catch((error) => {

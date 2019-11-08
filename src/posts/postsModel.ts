@@ -18,6 +18,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  user_id: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+  }
 });
 
 const postModel = mongoose.model<post & mongoose.Document>('Post', postSchema);

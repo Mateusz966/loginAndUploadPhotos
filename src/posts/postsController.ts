@@ -3,20 +3,22 @@ import post from './postInterface';
 import postModel from './postsModel';
 import controller from '../interfaces/controllerInterface';
 import { NextFunction } from 'connect';
+import authService from '../auth/authService';
 
 class PostsController implements controller {
   public path = '/posts';
   public router = express.Router();
+  private authService = new authService();
 
   constructor() {
     this.initializeRoutes();
   }
  
   public initializeRoutes() {
-    this.router.get(this.path, this.getAllPosts);
-    this.router.get(`${this.path}/:id`, this.getPost);
-    this.router.post(this.path, this.createPost);
-    this.router.delete(`${this.path}/:id`, this.deletePost);
+    this.router.get(this.path, this.authService.authMiddleware, this.getAllPosts);
+    this.router.get(`${this.path}/:id`, this.authService.authMiddleware, this.getPost);
+    this.router.post(this.path, this.authService.authMiddleware, this.createPost);
+    this.router.delete(`${this.path}/:id`, this.authService.authMiddleware, this.deletePost);
   }
  
   private getAllPosts = (request: express.Request, response: express.Response) => {
