@@ -23,13 +23,16 @@ class authService {
   public authMiddleware = (request: Request, response: Response, next: NextFunction) => {
     const token = request.cookies.token;
     const isTokenCorrect = this.verifyToken(token);
+    
     if(isTokenCorrect) {
-      next()
+      next();
     }
+
   }
 
-  public validateUser = (request: Request, response: Response, next: NextFunction) => {
-    
+  public getUserId = (token: string) => {
+    const decoded: any = jwt.decode(token, {complete: true});
+    return decoded.payload._id;
   }
   
 }

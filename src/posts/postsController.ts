@@ -47,6 +47,8 @@ class PostsController implements controller {
   }
  
   private createPost = (request: express.Request, response: express.Response) => {
+    const userId = this.authService.getUserId(request.cookies.token);
+    request.body.userId = userId;
     const postData: post = request.body;
     const createdPost = new postModel(postData);
     createdPost.save()
